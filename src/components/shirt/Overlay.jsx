@@ -1,5 +1,3 @@
-"use client";
-
 import { Logo } from "@pmndrs/branding";
 import {
   AiOutlineHighlight,
@@ -8,123 +6,107 @@ import {
   AiOutlineArrowLeft,
 } from "react-icons/ai";
 import { useSnapshot } from "valtio";
-import { motion, AnimatePresence } from "framer-motion";
 import { state } from "./store";
 
 export default function Overlay() {
   const snap = useSnapshot(state);
 
-  const transition = { type: "spring", duration: 0.8 };
-  const config = {
-    initial: { x: -100, opacity: 0, transition: { ...transition, delay: 0.5 } },
-    animate: { x: 0, opacity: 1, transition: { ...transition, delay: 0 } },
-    exit: { x: -100, opacity: 0, transition: { ...transition, delay: 0 } },
-  };
-
   return (
-    <div className="absolute inset-0 -z-10 pointer-events-none">
-      <div className="w-full h-full pointer-events-auto">
-        <motion.header
-          initial={{ opacity: 0, y: -120 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring", duration: 1.8, delay: 1 }}
-          className="fixed top-0 left-0 w-full p-10 flex justify-between items-center"
-        >
-          <Logo width="40" height="40" />
-          <AiOutlineShopping size="3em" />
-        </motion.header>
+    <div className="absolute inset-0 w-full h-full pointer-events-none">
+      {/* Header is interactive */}
+      <header className="fixed top-0 left-0 w-full flex justify-between items-center p-10 pointer-events-auto">
+        <Logo width="40" height="40" />
+        <AiOutlineShopping size="3em" />
+      </header>
 
-        <AnimatePresence>
-          {snap.intro ? (
-            <Intro key="main" config={config} />
-          ) : (
-            <Customizer key="custom" config={config} />
-          )}
-        </AnimatePresence>
-      </div>
+      {snap.intro ? <Intro /> : <Customizer />}
     </div>
   );
 }
 
-function Intro({ config }) {
+function Intro() {
   return (
-    <motion.section
-      {...config}
-      className="absolute inset-0 flex flex-col justify-center items-start px-[5vw] pt-[5vh]"
-    >
-      <div className="mt-[5vh]">
-        <h1 className="font-extrabold italic text-[20vh] leading-[15vh] tracking-[-6px] w-[30%] font-['Nunito_Sans']">
+    <section className="absolute inset-0 flex flex-col justify-center items-center">
+      <div className="mt-[15vh] ml-[5vw] pointer-events-auto">
+        <h1 className="font-black italic text-[16vw] leading-[17.5vh] tracking-[-6px] font-nunito w-[30%]">
           LET'S DO IT.
         </h1>
       </div>
-      <div className="relative -top-[25%] left-[300px]">
-        <p className="w-[350px] mb-12 leading-6">
+      <div className="md:self-end self-center md:text-start text-center pointer-events-auto">
+        <p className="w-[350px] mb-12 leading-6 mx-2">
           Create your unique and exclusive shirt with our brand-new 3D
           customization tool. <strong>Unleash your imagination</strong> and
           define your own style.
         </p>
         <button
-          className="bg-black text-white font-bold uppercase rounded px-6 py-4 flex items-center gap-4 transition-all duration-300 hover:scale-110 hover:shadow-inner hover:shadow-black"
+          className="md:mx-0 mx-auto bg-black text-white font-bold uppercase flex items-center gap-4 px-6 py-3 rounded transition-all duration-300 hover:scale-110"
           onClick={() => (state.intro = false)}
         >
           CUSTOMIZE IT <AiOutlineHighlight size="1.3em" />
         </button>
       </div>
-    </motion.section>
+    </section>
   );
 }
 
-function Customizer({ config }) {
+function Customizer() {
   const snap = useSnapshot(state);
 
   return (
-    <motion.section
-      {...config}
-      className="absolute inset-0 flex flex-col justify-end items-center mb-[25px]"
-    >
-      {/* Color Picker */}
-      <div className="absolute bottom-[20px] flex gap-[10px] mb-[20px]">
+    <section className="absolute inset-0 flex flex-col justify-end items-center pb-6">
+      {/* Color options */}
+      <div
+        className="
+    absolute flex gap-3
+    flex-col top-1/2 right-10 -translate-y-1/2
+    md:flex-row md:bottom-10 md:top-auto md:right-auto md:translate-y-0
+  "
+      >
         {snap.colors.map((color) => (
           <div
             key={color}
-            className="w-[30px] h-[30px] rounded-full border-2 border-white transition-transform duration-[600ms] ease-[cubic-bezier(0.85,0,0.15,1)] hover:scale-125 cursor-pointer"
+            className="w-8 h-8 rounded-full border-2 border-white cursor-pointer transition-transform duration-300 hover:scale-125 pointer-events-auto"
             style={{ background: color }}
             onClick={() => (state.selectedColor = color)}
           />
         ))}
       </div>
 
-      {/* Decal Picker */}
-      <div className="absolute left-[50px] bottom-[40px] flex gap-[20px]">
+      {/* Decals */}
+      <div className="absolute sm:left-12 left-6 bottom-10 flex gap-5 pointer-events-auto">
         {snap.decals.map((decal) => (
           <div
             key={decal}
-            className="w-[24px] cursor-pointer transition-all duration-200 ease-in-out hover:scale-125"
+            className="cursor-pointer"
             onClick={() => (state.selectedDecal = decal)}
           >
             <img
               src={`/${decal}_thumb.png`}
               alt="brand"
-              className="filter grayscale invert brightness-[5.5] hover:filter-none"
+              className="w-6  hover:scale-110 transition-all duration-300"
             />
           </div>
         ))}
       </div>
 
-      {/* Action Buttons */}
+      {/* Buttons */}
       <button
-        className="absolute bottom-[40px] right-[40px] text-white px-6 py-3 rounded flex items-center gap-2"
+        className="absolute bottom-8 sm:right-10 right-6 px-6 py-3 rounded font-bold uppercase flex items-center gap-3 text-white transition-transform duration-300 hover:scale-110 pointer-events-auto"
         style={{ background: snap.selectedColor }}
         onClick={() => {
+          // Grab the canvas element rendered by @react-three/fiber
+          const canvas = document.querySelector("canvas");
+          if (!canvas) return;
+
+          // Convert canvas to a PNG data URL
+          const dataURL = canvas.toDataURL("image/png");
+
+          // Create a temporary <a> element to trigger download
           const link = document.createElement("a");
-          link.setAttribute("download", "canvas.png");
-          link.setAttribute(
-            "href",
-            document
-              .querySelector("canvas")
-              .toDataURL("image/png")
-              .replace("image/png", "image/octet-stream")
-          );
+          link.download = "shirt.png"; // filename
+          link.href = dataURL.replace("image/png", "image/octet-stream");
+
+          // Trigger the download
           link.click();
         }}
       >
@@ -132,12 +114,12 @@ function Customizer({ config }) {
       </button>
 
       <button
-        className="absolute top-[40px] right-[40px] text-white px-6 py-3 rounded flex items-center gap-2 shadow-inner hover:shadow-[inset_-250px_0_0_0_black]"
+        className="absolute top-10 right-10 px-6 py-3 rounded font-bold uppercase flex items-center gap-3 text-white transition-transform duration-300 hover:scale-110 pointer-events-auto"
         style={{ background: snap.selectedColor }}
         onClick={() => (state.intro = true)}
       >
         GO BACK <AiOutlineArrowLeft size="1.3em" />
       </button>
-    </motion.section>
+    </section>
   );
 }

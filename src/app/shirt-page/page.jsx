@@ -1,16 +1,18 @@
 "use client";
 
 import Overlay from "@/components/shirt/Overlay";
-import ShirtScene from "@/components/shirt/ShirtScene";
-import { useState } from "react";
+import Canvas from "@/components/shirt/Canvas";
 
 export default function Page() {
-  const [shirtColor, setShirtColor] = useState("#FFFFFF");
-
   return (
-    <div className="relative w-full h-screen overflow-hidden">
-      <ShirtScene color={shirtColor} />
-      <Overlay onColorChange={setShirtColor} />
+    <div className="relative w-full h-screen">
+      <div className="absolute inset-0 z-0">
+        <Canvas />
+      </div>
+
+      <div className="absolute inset-0 z-10 pointer-events-none">
+        <Overlay />
+      </div>
     </div>
   );
 }

@@ -1,17 +1,15 @@
-"use client";
-
+import { useFrame } from "@react-three/fiber";
 import { useGLTF, useTexture, Decal } from "@react-three/drei";
 import { useSnapshot } from "valtio";
-import { useFrame } from "@react-three/fiber";
 import { easing } from "maath";
 import { state } from "./store";
 
-export default function Shirt(props) {
+export function AppShirt(props) {
   const snap = useSnapshot(state);
   const texture = useTexture(`/${snap.selectedDecal}.png`);
   const { nodes, materials } = useGLTF("/shirt_baked_collapsed.glb");
 
-  useFrame((state, delta) =>
+  useFrame((_, delta) =>
     easing.dampC(materials.lambert1.color, snap.selectedColor, 0.25, delta)
   );
 
@@ -37,4 +35,3 @@ export default function Shirt(props) {
 }
 
 useGLTF.preload("/shirt_baked_collapsed.glb");
-["/react.png", "/three2.png", "/pmndrs.png"].forEach(useTexture.preload);

@@ -5,7 +5,7 @@ import { AccumulativeShadows, RandomizedLight } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { easing } from "maath";
 import { useSnapshot } from "valtio";
-import { state } from "@/store";
+import { state } from "./store";
 
 export default function Backdrop() {
   const shadows = useRef();
