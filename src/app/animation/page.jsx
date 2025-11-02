@@ -29,7 +29,7 @@ export default function FiberScene({ position = [0, 0, 20], fov = 35 }) {
 
 function Shirt() {
   return (
-    <mesh scale={[5, 5, 5]}>
+    <mesh scale={[4, 4, 4]}>
       <boxGeometry args={[0.5, 0.5, 0.5]} />
       <meshNormalMaterial />
     </mesh>

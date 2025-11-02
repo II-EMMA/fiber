@@ -16,7 +16,7 @@ import Shirt from "./Shirt";
 
 export default function ShirtScene({ color }) {
   return (
-    <div className="fixed inset-0 z-0">
+    <div className="fixed inset-0 z-50">
       <Canvas
         shadows
         gl={{ preserveDrawingBuffer: true }}
