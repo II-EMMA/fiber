@@ -51,26 +51,16 @@ function Intro() {
 
 function Customizer() {
   const snap = useSnapshot(state);
-  function DownloadButton() {
-  const handleDownload = () => {
-    const canvas = document.querySelector("canvas");
-    if (!canvas) return;
-    const dataURL = canvas.toDataURL("image/png");
-    const link = document.createElement("a");
-    link.download = "shirt.png";
-    link.href = dataURL;
-    link.click();
-  };
 
   return (
     <section className="absolute inset-0 flex flex-col justify-end items-center pb-6">
       {/* Color options */}
       <div
         className="
-    absolute flex gap-3
-    flex-col top-1/2 right-10 -translate-y-1/2
-    md:flex-row md:bottom-10 md:top-auto md:right-auto md:translate-y-0
-  "
+          absolute flex gap-3
+          flex-col top-1/2 right-10 -translate-y-1/2
+          md:flex-row md:bottom-10 md:top-auto md:right-auto md:translate-y-0
+        "
       >
         {snap.colors.map((color) => (
           <div
@@ -93,7 +83,7 @@ function Customizer() {
             <img
               src={`/${decal}_thumb.png`}
               alt="brand"
-              className="w-6  hover:scale-110 transition-all duration-300"
+              className="w-6 hover:scale-110 transition-all duration-300"
             />
           </div>
         ))}
@@ -103,7 +93,18 @@ function Customizer() {
       <button
         className="absolute bottom-8 sm:right-10 right-6 px-6 py-3 rounded font-bold uppercase flex items-center gap-3 text-white transition-transform duration-300 hover:scale-110 pointer-events-auto"
         style={{ background: snap.selectedColor }}
-        onClick={handleDownload}
+        onClick={() => {
+          if (typeof document !== "undefined") {
+            const canvas = document.querySelector("canvas");
+            if (!canvas) return;
+
+            const dataURL = canvas.toDataURL("image/png");
+            const link = document.createElement("a");
+            link.download = "shirt.png";
+            link.href = dataURL.replace("image/png", "image/octet-stream");
+            link.click();
+          }
+        }}
       >
         DOWNLOAD <AiFillCamera size="1.3em" />
       </button>
