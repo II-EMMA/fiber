@@ -1,7 +1,14 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Overlay from "@/components/shirt/Overlay";
-import Canvas from "@/components/shirt/Canvas";
+
+// Dynamically import Canvas with SSR disabled
+const Canvas = dynamic(() => import("@/components/shirt/Canvas"), {
+  ssr: false,
+});
+
+export const ssr = false; // or: export const dynamic = "force-dynamic";
 
 export default function Page() {
   return (
